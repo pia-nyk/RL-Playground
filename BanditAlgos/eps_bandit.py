@@ -1,29 +1,21 @@
 import numpy as np
-from modules.plot_utility import *
 
 k = 10
 ITER = 1000
 EPISODES = 1000
 
 class eps_bandit:
-    def __init__(self, k, eps, iter, mu='random'):
+    def __init__(self, eps):
         self.k = k #no. of arms
         self.eps = eps #search probability
-        self.iter = iter #no. of iterations
+        self.iter = ITER #no. of iterations
         self.n = 0 #step count
         self.k_n = np.zeros(k) #step count for each arm
         self.mean_reward = 0 #total mean reward
-        self.reward = np.zeros(iter)
+        self.reward = np.zeros(ITER)
         self.k_reward = np.zeros(k) #mean reward for each arm
+        self.mu = np.random.normal(0, 1, k)
 
-        if type(mu) == list or type(mu).__module__ == np.__name__:
-            self.mu = np.array(mu)
-        elif mu == 'random':
-            #draw mean from probability distribution
-            self.mu = np.random.normal(0, 1, k)
-        elif mu == 'sequence':
-            #increase the mean for each arm by 1
-            self.mu = np.linspace(0, k-1, k)
 
     def pull(self):
         p = np.random.rand()
@@ -53,25 +45,12 @@ class eps_bandit:
             self.pull()
             self.reward[i] = self.mean_reward
 
-
-    def reset(self):
-        #resets results while keeping setting
-        self.n = 0
-        self.k_n = np.zeros(k)
-        self.mean_reward = 0
-        self.reward = np.zeros(iter)
-        self.k_reward = np.zeros(k)
-
-def mu_random(eps_val, mu=None):
+def start(eps_val):
     eps_rewards = np.zeros(ITER)
     #Run Experiments
     for i in range(EPISODES):
         #Initialize bandits
-        if(mu is None):
-            eps = eps_bandit(k, eps_val, ITER)
-        else:
-            eps = eps_bandit(k, eps_val, ITER, mu)
-
+        eps = eps_bandit(eps_val)
         #Run Experiments
         eps.run()
 
@@ -79,26 +58,3 @@ def mu_random(eps_val, mu=None):
         eps_rewards = eps_rewards + (eps.reward - eps_rewards)/ (i+1)
 
     return (eps,eps_rewards)
-
-def mu_sequence(eps_val, mu=None):
-    eps_rewards = np.zeros(ITER)
-    eps_selection = np.zeros(k)
-
-    #Run Experiments
-    for i in range(EPISODES):
-        #Initialize bandits
-        if(mu is None):
-            eps = eps_bandit(k, eps_val, ITER, mu='sequence')
-        else:
-            eps = eps_bandit(k, eps_val, ITER, mu)
-
-        #Run Experiments
-        eps.run()
-
-        #Update long term average
-        eps_rewards = eps_rewards + (eps.reward - eps_rewards)/ (i+1)
-
-        #Average actions per episode
-        eps_selection = eps_selection + (eps.k_n - eps_selection)/ (i+1)
-
-    return [eps, eps_rewards, eps_selection]
