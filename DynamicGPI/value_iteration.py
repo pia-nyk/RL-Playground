@@ -33,13 +33,13 @@ def value_iteration(threshold=0.001, gamma=1.0):
 
     V = np.zeros(states)
     while True:
-        delta = 0  #checker for improvements across states
+        delta = 0  
         for state in range(env.env.nS):
             act_values = one_step_lookahead(state,V)  #lookahead one step
             best_act_value = np.max(act_values) #get best action value
             delta = max(delta,np.abs(best_act_value - V[state]))  #find max delta across all states
-            V[state] = best_act_value  #update value to best action value
-        if delta < threshold:  #if max improvement less than threshold
+            V[state] = best_act_value  
+        if delta < threshold:  
             break
     policy = np.zeros([env.env.nS, env.env.nA])
     for state in range(env.env.nS):  #for all states, create deterministic policy
