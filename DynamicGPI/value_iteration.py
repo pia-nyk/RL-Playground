@@ -2,7 +2,7 @@ import gym
 import numpy as np
 
 #create environment
-env = gym.make('FrozenLake-v0')
+env = gym.make('FrozenLake8x8-v0')
 #as the environment is continuous, there cannot be finite number of states
 states = env.observation_space.n
 
@@ -33,16 +33,16 @@ def value_iteration(threshold=0.001, gamma=1.0):
 
     V = np.zeros(states)
     while True:
-        delta = 0  
+        delta = 0
         for state in range(states):
             act_values = one_step_lookahead(state,V)  #lookahead one step
             best_act_value = np.max(act_values) #get best action value
             delta = max(delta,np.abs(best_act_value - V[state]))  #find max delta across all states
-            V[state] = best_act_value  
-        if delta < threshold:  
+            V[state] = best_act_value
+        if delta < threshold:
             break
     policy = np.zeros([states, actions])
-    for state in range(states):  
+    for state in range(states):
         act_val = one_step_lookahead(state,V)
         best_action = np.argmax(act_val)
         policy[state][best_action] = 1

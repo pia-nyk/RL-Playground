@@ -2,7 +2,7 @@
 import gym
 import numpy as np
 #make environment
-env = gym.make('FrozenLake-v0')
+env = gym.make('FrozenLake8x8-v0')
 
 #as the environment is continuous, there cannot be finite number of states
 states = env.observation_space.n
