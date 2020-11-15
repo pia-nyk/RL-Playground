@@ -44,7 +44,7 @@ def monte_carlo_ES(env, n_episodes):
         states_actions, rewards, states = generate_episode()
         returns = 0
         # print(states_actions)
-        for state in range(len(states_actions)):
+        for state in range(len(states_actions) - 1, -1, -1):
             R = rewards[state]
             S = states_actions[state]
             returns+=R
