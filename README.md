@@ -1,4 +1,4 @@
-# Reinforcement-Learning-Using-OpenAI-Gym-
+# RL on OpenAI Gym
 Reinforcement Learning Algorithms in different Environments from OpenAI Gym
 
 <b> Algorithms: </b>
