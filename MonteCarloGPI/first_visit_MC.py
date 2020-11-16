@@ -1,5 +1,7 @@
 import gym
 from collections import defaultdict
+import plot
+import numpy as np
 
 env = gym.make("Blackjack-v0")
 
@@ -22,24 +24,23 @@ def generate_episode(policy):
             break
     return states, actions, rewards
 
-def first_visit_MC(policy, env, n_episodes):
-    value_table = defaultdict(float)
-    N = defaultdict(int)
+def first_visit_MC(policy, env, n_episodes, gamma=1.0):
+    V = defaultdict(float)
+    returns = defaultdict(list)
 
     for _ in range(n_episodes):
         states, _, rewards = generate_episode(policy)
-        returns = 0
+        G = 0
 
-        for state in range(len(states)-1,-1,-1):
-            R = rewards[state]
+        for state in range(len(states)-2,-1,-1):
+            R1 = rewards[state+1]
             S = states[state]
-            returns+=R
+            G = G*gamma + R1
 
             if S not in states[:state]:
-                N[S]+=1
-                value_table[S]+=(returns - value_table[S])/N[S]
-    return value_table
+                returns[S].append(G)
+                V[S] = np.average(returns[S])
+    return V
 
-final_dict = first_visit_MC(sample_policy, env, 500000)
-for i in range(10):
-  print(final_dict.popitem())
+V = first_visit_MC(sample_policy, env, 100000)
+plot.plot_blackjack(V)
