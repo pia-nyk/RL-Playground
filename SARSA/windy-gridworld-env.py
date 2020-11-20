@@ -33,10 +33,10 @@ class WindyGridWorld:
         if self.x in [3,4,5,8]: y-=1
         elif self.x in [6,7]: y-=2
 
-        if action == 0: x-=1
-        elif action == 1: x+=1
-        elif action == 2: y-=1
-        elif action == 3: y+=1
+        if action == 0: x-=1 #left
+        elif action == 1: x+=1 #right
+        elif action == 2: y-=1 #up
+        elif action == 3: y+=1 #down
         if x >= 0 and x <= 9:
             self.x = x
         if y >=0 and y <= 6:
