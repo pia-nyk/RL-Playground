@@ -9,6 +9,7 @@ import numpy as np
 from gym import wrappers
 import os
 from tensorflow.keras import optimizers
+import matplotlib.pyplot as plt
 
 class DQNModel(tf.keras.Model):
     def __init__(self, num_states, hidden_units, num_actions):
@@ -120,13 +121,14 @@ def play_game(env, TrainNet, TargetNet, eps, copy_steps):
 
 def make_video(env, TrainNet):
     #run the cartpole env for one episode, gym will create a video of it
-    env = wrappers.Monitor(env, os.path.join(os.getcwd(), "videos"), force=True)
+    # env = wrappers.Monitor(env, os.path.join(os.getcwd(), "videos"), force=True)
     rewards = 0
     steps = 0
     done = False
     observation = env.reset()
     while not done:
-        action = TrainNet.get_action(observation, 0)
+        action = TrainNet.policy(observation, 0)
+        env.render()
         observation, reward, done, _ = env.step(action)
         steps += 1
         rewards += reward
@@ -145,7 +147,7 @@ def main():
     lr = 1e-2
     TrainNet = DQN(num_states, num_actions, hidden_units, gamma, max_experiences, min_experiences, batch_size, lr)
     TargetNet = DQN(num_states, num_actions, hidden_units, gamma, max_experiences, min_experiences, batch_size, lr)
-    N = 50000
+    N = 500
     total_rewards = np.empty(N)
     epsilon = 0.99
     decay = 0.9999
@@ -159,7 +161,11 @@ def main():
             print("episode:", n, "episode reward:", total_reward, "eps:", epsilon, "avg reward (last 100):", avg_rewards,
                   "episode loss: ", losses)
     print("avg reward for last 100 episodes:", avg_rewards)
-    make_video(env, TrainNet)
+    fig = plt.figure()
+    plt.plot(np.arange(1, len(total_rewards)+1), total_rewards)
+    plt.ylabel('Score')
+    plt.xlabel('Episode #')
+    plt.show()
     env.close()
 
 if __name__ == '__main__':
