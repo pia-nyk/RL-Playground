@@ -1,3 +1,6 @@
+'''
+    Reference blog: https://mofanpy.com/tutorials/machine-learning/reinforcement-learning/A3C/
+'''
 import tensorflow as tf
 import multiprocessing
 import os
