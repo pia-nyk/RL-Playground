@@ -107,7 +107,7 @@ def train():
 
             #get discounted reward for training
             discounted_normalized_rewards = discounted_normalized_returns(episode_rewards)
-            loss, _ = sess.run([loss, train_opt], feed_dict={inputs_=np.vstack(np.array(states)), actions_=np.vstack(np.array(actions)), discounted_rewards=discounted_normalized_rewards})
+            loss, _ = sess.run([loss, train_opt], feed_dict={inputs_:np.vstack(np.array(states)), actions_:np.vstack(np.array(actions)), discounted_rewards:discounted_normalized_rewards})
 
             if _%100 == 0:
                 saver.save(sess, "./models/model.ckpt")
