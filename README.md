@@ -11,3 +11,4 @@ Reinforcement Learning Algorithms in different Environments from OpenAI Gym
   <li> Expected SARSA </li>
   <li> Q-learning </li>
   <li> Deep Q-Learning </li>
+  <li> A3C </li>
