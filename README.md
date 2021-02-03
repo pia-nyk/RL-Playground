@@ -1,5 +1,5 @@
 # RL on OpenAI Gym
-Reinforcement Learning Algorithms in different Environments from OpenAI Gym
+Reinforcement Learning Algorithms on OpenAI Gym Environment
 
 <b> Algorithms: </b>
 <ul>
